@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.Random;
@@ -14,7 +15,9 @@ public class MainActivity extends AppCompatActivity
     private ArrayAdapter<String> sortedAA, unsortedAA;
     private int[] sortedNumbers, unsortedNumbers;
     private String[] sortedStrings, unsortedStrings;
-    private final int numberOfElements = 100;
+    private int numberOfElements = 0;
+    private int start = 0;
+    private int end = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -123,8 +126,28 @@ public class MainActivity extends AppCompatActivity
         this.updateStringArrays();
     }
 
-    public void resetButtonPressed(View v)
+    public void generateButtonPressed(View v)
     {
+        EditText countET = (EditText)findViewById(R.id.countET);
+        this.numberOfElements = Integer.parseInt(countET.getText().toString());
+
+        EditText startET = (EditText)findViewById(R.id.startET);
+        this.start = Integer.parseInt(startET.getText().toString());
+
+        EditText endET = (EditText)findViewById(R.id.endET);
+        this.end = Integer.parseInt(endET.getText().toString());
+
+        this.sortedNumbers = new int[this.numberOfElements];
+        this.unsortedNumbers = new int[this.numberOfElements];
+        this.sortedStrings = new String[this.numberOfElements];
+        this.unsortedStrings = new String[this.numberOfElements];
+
+        this.sortedAA = new ArrayAdapter<String>(this, R.layout.simple_listview_row, this.sortedStrings);
+        this.unsortedAA = new ArrayAdapter<String>(this, R.layout.simple_listview_row, this.unsortedStrings);
+
+        this.sortedLV.setAdapter(this.sortedAA);
+        this.unsortedLV.setAdapter(this.unsortedAA);
+
         this.initializeArrays();
     }
 
@@ -164,9 +187,10 @@ public class MainActivity extends AppCompatActivity
     {
         Random r = new Random();
 
+
         for(int i = 0; i < ar.length; i++)
         {
-            ar[i] = r.nextInt(500);
+            ar[i] = r.nextInt(this.end-this.start) + this.start;
         }
     }
 }
